@@ -1,0 +1,4 @@
+#!/bin/sh
+[ "$(cat /sys/class/net/w*/operstate)" = 'down' ] && wifiicon="" || wifiicon=$(grep "^\s*w" /proc/net/wireless | awk '{ print "" }')
+[ "$(nmcli device | grep 'wireguard  connected')" != "" ] && wgicon="" || wgicon=""
+printf " %s %s %s" "$wgicon $wifiicon"

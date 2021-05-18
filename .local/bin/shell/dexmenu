@@ -1,0 +1,11 @@
+#!/bin/bash
+
+# Requires *dex*
+# Form list of .desktop files creates dmenu and passes selected entry to dex
+
+BASE_DIR="${XDG_DESKTOP_DIR:-$HOME/Desktop}"
+APP_DIR="$HOME/.local/share/applications"
+file=$(find $BASE_DIR $APP_DIR -type f -name "*.desktop" | xargs -I{} basename "{}" .desktop | dmenu)
+[ -z "$file" ] && exit 1
+notify-send "dex" "starting $file"
+dex $(find $BASE_DIR $APP_DIR -type f -name "$file.desktop")

@@ -1,0 +1,3 @@
+#!/bin/sh
+echo $(df -h / /home /mnt/storage/Public 2>/dev/null | awk '(NR>1) {print $6 " " $5}' | sed 's,^/ ,  ,;s,^/home ,   ,;s,^/mnt/storage/Public ,   ,')
+

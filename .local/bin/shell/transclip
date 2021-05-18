@@ -1,0 +1,8 @@
+#!/bin/bash
+
+# Requires translate-shell
+# Take primary clipboard content
+# Translate it to $1 lang
+# Copy to primary cliboard, send notifycation, return translated text
+notify-send "Translating..."
+xclip -o | trans :$1 -brief | tee >(xclip -i) >(xargs -I{} notify-send "$1" {})

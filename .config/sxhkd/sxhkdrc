@@ -1,0 +1,90 @@
+super + Return
+	$TERMINAL
+
+super + d
+	dmenu_run
+
+super + comma
+	mpc prev
+
+super + period
+	mpc next
+
+super + shift + comma
+	mpc seek 0%
+
+super + shift + period
+	mpc repeat
+
+super + shift + minus
+	sndctl down 15
+
+super + shift + equal
+	sndctl up 15
+
+super + w
+	$BROWSER
+
+super + shift + l
+	$TERMINAL -e sudo nmtui
+
+super + e
+	$BROWSER beta.protonmail.com
+
+super + p
+	mpc toggle
+
+super + bracketleft
+	mpc seek -10
+
+super + bracketright
+	mpc seek +10
+
+super + a
+	sndctl output
+
+super + shift + d
+	dexmenu
+
+super + shift + w
+	$TERMINAL -n sp -g 120x34 -e $EDITOR -c "VimwikiIndex"
+
+super + m
+	mutenotify
+
+Print
+	maim pic-full-$(date '+%y%m%d-%H%M-%S').png")
+
+shift + Print
+	maimpick
+
+XF86AudioMute
+	sndctl toggle
+
+XF86AudioRaiseVolume
+	sndctl up
+
+XF86AudioLowerVolume
+	sndctl down
+
+XF86AudioPrev
+	mpc prev
+
+XF86AudioNext
+	mpc next
+
+XF86AudioPause
+	mpc pause
+
+XF86AudioPlay
+	mpc play
+
+XF86AudioStop
+	mpc stop
+
+XF86AudioRewind
+	mpc seek -10
+
+XF86AudioForward
+	mpc seek +10
+

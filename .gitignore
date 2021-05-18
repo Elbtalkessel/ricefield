@@ -1,0 +1,8 @@
+*.log
+*.db
+.config/nvim/.netrwhist
+.config/nvim/bundle/*
+.config/nvim/plugged/*
+*.idea
+*.sqlite3
+

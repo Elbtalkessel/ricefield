@@ -1,0 +1,55 @@
+#!/bin/bash
+
+
+# NOTE: the scrip won't work if xrandr can't detect proper resolution
+# check it: `xrandr`
+# /etc/X11/xorg.conf.d/20-widescreen.conf
+# Section "Monitor"
+#   Identifier "HDMI-2"
+#   Modeline "2560x1080_60.00"  230.00  2560 2720 2992 3424  1080 1083 1093 1120 -hsync +vsync
+# EndSection
+# Where Modeline you can get running `:read !cvt 2560 1080 60`
+
+# It changes depend on graphic card
+# Intel eDP-1 HDMI-2
+# Nvidia eDP-1-1 HDMI-1-2
+M0_NV=eDP-1-1
+M1_NV=HDMI-1-2
+M0_IN=DisplayPort-2
+M1_IN=HDMI-A-0
+
+# if nvidia graphics
+if xrandr | grep "$M0_NV"
+then
+  # black screen without --auto
+  xrandr --auto
+  # xrandr --setprovideroutputsource modesetting nvidia-0
+  M0="$M0_NV"
+  M1="$M1_NV"
+# or intel
+else
+  M0="$M0_IN"
+  M1="$M1_IN"
+fi
+
+# if single else multiple
+if xrandr | grep "$M1 disconnected"; then
+	xrandr --output "$M1" --off --output "$M0" --auto
+else
+  # --auto does not detects/choices right resolution :(
+  # xrandr --output "$M0" --off --output "$M1" --mode "2560x1080_60.00"
+  # xrandr --dpi "100/${M1}"
+
+  xrandr --output "$M0" --primary --auto
+  xrandr --output "$M1" --auto --left-of "$M0"
+fi
+
+setbg
+xcompmgr -cfF -o 0.5 -D 1.5 # c: shadows; f: smooth fade; F: fade on opacity change; D: transition speed
+
+# turn off Display Power Management Service (DPMS)
+xset -dpms
+setterm -powerdown 0
+
+# turn off black Screensaver
+xset s off

@@ -1,0 +1,68 @@
+#!/bin/sh
+
+# Use neovim for vim if present.
+command -v nvim >/dev/null && alias vim="nvim" vimdiff="nvim -d" vi="nvim"
+
+# Verbosity and settings that you pretty much just always are going to want.
+alias cp="cp -iv"
+alias mv="mv -iv"
+alias rm="rm -v"
+alias ln="ln -v"
+
+# Colorize commands when possible.
+alias ls="ls -N --color=auto --group-directories-first"
+alias grep="grep --color=auto"
+alias diff="diff --color=auto"
+alias ccat="highlight --out-format=ansi"
+alias grep="grep --color=auto"
+alias egrep="egrep --color=auto"
+alias grip="grep -i --color=auto"
+
+# Variations
+alias ll="ls --dereference-command-line-symlink-to-dir -lah"
+
+# These common commands are just too long! Abbreviate them.
+alias ka="killall"
+alias gitm="git merge --no-ff"
+alias gits="git status"
+alias trem="transmission-remote"
+alias tdae="transmission-daemon"
+alias e="$EDITOR"
+alias v="$EDITOR"
+alias p="sudo pacman"
+alias S="sudo systemctl"
+alias Su="systemctl --user"
+alias s="sudo"
+alias dfh="df -T -h -x tmpfs -x devtmpfs"
+alias ytdl='youtube-dl'
+alias ytvi='youtube-viewer -S'
+alias ytda='youtube-dl --output "%(title)s.%(ext)s" --extract-audio --audio-format mp3'
+alias servefolder='python3 -m http.server 9000 --bind 127.0.0.1'
+alias remaps='setxkbmap -layout us,ru'
+
+# This alias is important. It enables the `pauseallmpv` command.
+alias mpv="mpv --input-ipc-server=/tmp/mpvsoc$(date +%s)"
+
+# VPN
+alias externalip="curl ipinfo.io/ip"
+
+# Power management
+alias logout="pkill -KILL -u risus"
+alias reboot="S reboot"
+alias poweroff="S poweroff"
+
+# OCD
+alias tmux="tmux -f $XDG_CONFIG_HOME/tmux/tmux.conf"
+alias abook="abook --config $XDG_CONFIG_HOME/abook/abookrc --datafile $XDG_DATA_HOME/abook/addressbook"
+
+# Navigation
+alias gsrc="cd $HOME/.local/src && ls"
+alias gprj="cd $HOME/Projects && ls"
+alias gbin="cd $HOME/.local/bin/shell && ls"
+alias gcon="cd $HOME/.config && ls"
+
+# Configs
+alias esxh="$EDITOR $XDG_CONFIG_HOME/sxhkd/sxhkdrc"
+alias edun="$EDITOR $XDG_CONFIG_HOME/dunst/dunstrc"
+
+alias aliases="less ~/.config/aliasrc"

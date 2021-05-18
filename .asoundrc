@@ -1,0 +1,10 @@
+pcm.headphones {
+    type hw
+    card 0
+    device 0
+}
+pcm.speaker {
+    type hw
+    card 1
+    device 9
+}
