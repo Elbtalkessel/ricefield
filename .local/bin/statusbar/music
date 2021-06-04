@@ -11,9 +11,9 @@ then
 		title=$(basename "$(mpc | head -1)" | sed 's,\(\.mp3\|\.flac\),,g')
 	fi
   # File name is too long, cut it to 20 symbols
-  if [ "${#title}" -gt 20 ]
+  if [ "${#title}" -gt 10 ]
 	then
-		title=$(echo ${title} | cut -c -20 | sed 's,$,...,')
+		title="$(echo ${title} | cut -c -10)..."
 	fi
 fi
 
@@ -28,5 +28,5 @@ fi
 # pad variable, '100', ' 99', etc.
 volume=$(printf %3s $(ponymix get-volume))
 device=$(ponymix --short | awk '(NR==1){print $4}')
-echo "${status} ${title} (${device}) ${volume}%" | tr '[:upper:]' '[:lower:]'
+echo "${status} ${device} ${volume}% ${title}" | tr '[:upper:]' '[:lower:]'
 

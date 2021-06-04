@@ -44,7 +44,7 @@ alias remaps='setxkbmap -layout us,ru'
 alias mpv="mpv --input-ipc-server=/tmp/mpvsoc$(date +%s)"
 
 # VPN
-alias externalip="curl ipinfo.io/ip"
+alias eip="ipinfo myip"
 
 # Power management
 alias logout="pkill -KILL -u risus"

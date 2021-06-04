@@ -16,6 +16,8 @@ fi
 
 export BIN_HOME="$HOME/.local/bin"
 export SOURCE_HOME="$HOME/.local/src"
+export GOPATH="$SOURCE_HOME/go"
+
 if [ "$XDG_CURRENT_DESKTOP" != "SSH" ]
 then
     export BACKUPS_DIR="/mnt/storage/Backups"
@@ -25,6 +27,7 @@ fi
 # Adds `~/.local/bin` and children dir to $PATH
 # sed doesn't replace last occurency as tr does, dk why but it desirable
 export PATH="$PATH:$(find $BIN_HOME -type d | grep -v "__" | sed ':a;N;$!ba;s/\n/:/g')"
+export PATH="$PATH:$GOPATH/bin"
 
 # Default programs:
 if [ "$XDG_CURRENT_DESKTOP" = "SSH" ]

@@ -1,38 +1,45 @@
 #!/usr/bin/python3
+from io import StringIO
 import os
+import argparse
+from pathlib import Path
 
+parser = argparse.ArgumentParser(description='Generates .m3u by folder')
+parser.add_argument('d', help='Music folder')
+args = parser.parse_args()
 
-BASE_DIR=os.path.expanduser('~')
-MUSIC_DIR=os.path.join(BASE_DIR, 'Music')
-PL_DIR=os.path.join(BASE_DIR, '.local', 'share', 'mpd', 'playlists')
+MUSIC_DIR = Path(args.d)
+PLAYLIST_DIR = MUSIC_DIR / './PLAYLISTS'
+FILE_EXT = ('mp3', 'flac')
 
-assert os.path.exists(PL_DIR)
 assert os.path.exists(MUSIC_DIR)
+assert os.path.exists(PLAYLIST_DIR)
 
 
-def subwalk(dir):
-    paths = []
-    for base_dir, sub_dirs, files in os.walk(dir):
-        for file in files:
-            if not file.endswith(('mp3', 'flac')):
-                continue
-            p = f'{base_dir}/{file}'
-            paths.append(p.replace(MUSIC_DIR + '/', ''))
-    return paths
+def subwalk(top):
+    for root, dirs, files in os.walk(top):
+        yield from (Path(os.path.relpath(root, PLAYLIST_DIR)) / f for f in files if f.endswith(FILE_EXT))
 
 
-def rootwalk(dir):
-    chkdirs = [n for n in os.listdir(dir) if os.path.isdir(os.path.join(dir, n))]
-    for rootdir in chkdirs:
-        yield subwalk(os.path.join(dir, rootdir))
+def rootlist():
+    for d in next(os.walk(MUSIC_DIR))[1]:
+        subdir = MUSIC_DIR / d
+        yield [d, subwalk(subdir)]
 
 
-if __name__ == '__main__':
-    for fpaths in rootwalk(MUSIC_DIR):
-        if not fpaths:
-            continue
-        pl_name = fpaths[0].split('/')[0] + '.m3u'
-        pl_path = os.path.join(PL_DIR, pl_name)
-        with open(pl_path, 'w') as f:
-            for fpath in fpaths:
-                f.write(fpath + '\n')
+def main():
+    for band, songs in rootlist():
+        written = 0
+        content = StringIO()
+        filepath = PLAYLIST_DIR / f'{band}.m3u'
+
+        written += content.write('#EXTM3U\n')
+        for song in songs:
+            written += content.write(str(song) + '\n')
+
+        print(f'{written} -> {filepath}')
+        with open(filepath, 'w') as f:
+            f.write(content.getvalue())
+
+main()
+

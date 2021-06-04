@@ -88,3 +88,5 @@ XF86AudioRewind
 XF86AudioForward
 	mpc seek +10
 
+ctrl + space
+	xkb-switch -n && notify-send $(xkb-switch -p) -u low

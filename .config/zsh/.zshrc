@@ -19,7 +19,7 @@ setopt HIST_IGNORE_ALL_DUPS
 #
 
 # Set editor default keymap to emacs (`-e`) or vi (`-v`)
-bindkey -e
+bindkey -v
 
 # Prompt for spelling correction of commands.
 #setopt CORRECT
@@ -213,3 +213,6 @@ _zlf_handler() {
  zle -R
 }
 zle -N _zlf_handler
+
+
+source "$HOME/.config/zsh/.zim/modules/zsh-system-clipboard/zsh-system-clipboard.zsh"
