@@ -1,0 +1,2 @@
+#!/bin/sh
+while ! pgrep -x $@; do sleep 0.3; done;

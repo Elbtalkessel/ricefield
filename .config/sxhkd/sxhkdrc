@@ -1,0 +1,98 @@
+super + Return
+  $TERMINAL
+
+super + d
+  dmenu_run
+
+super + comma
+  mpc prev && notify-send "$(mpc current)" -u low
+
+super + period
+  mpc next && notify-send -h string:geometry:"" "$(mpc current)" -u low
+
+super + shift + comma
+  mpc seek 0%
+
+super + shift + period
+  mpc repeat && notify-send "$(mpc current)" -u low
+
+super + shift + minus
+  sndctl down 15
+
+super + shift + equal
+  sndctl up 15
+
+super + w
+  $BROWSER
+
+super + e
+  $BROWSER beta.protonmail.com
+
+super + p
+  mpc toggle && notify-send "$(mpc)"
+
+super + shift + p
+  passmenu && notify-send -u low "Password copied"
+
+super + bracketleft
+  mpc seek -10
+
+super + bracketright
+  mpc seek +10
+
+super + a
+  sndctl output
+
+super + shift + w
+  $TERMINAL -e $EDITOR -c "VimwikiIndex"
+
+super + m
+  mutenotify
+
+super + n
+  dvirsh start
+
+super + shift + n
+  dvirsh stop
+
+Print
+  maim pic-full-$(date '+%y%m%d-%H%M-%S').png")
+
+shift + Print
+  maimpick
+
+XF86AudioMute
+  sndctl toggle
+
+XF86AudioRaiseVolume
+  sndctl up 5
+
+XF86AudioLowerVolume
+  sndctl down 5
+
+XF86AudioPrev
+  mpc prev
+
+XF86AudioNext
+  mpc next
+
+XF86AudioPause
+  mpc pause
+
+XF86AudioPlay
+  mpc play
+
+XF86AudioStop
+  mpc stop
+
+XF86AudioRewind
+  mpc seek -10
+
+XF86AudioForward
+  mpc seek +10
+
+ctrl + space
+  xkb-switch -n && notify-send $(xkb-switch -p) -u low
+
+super + grave
+  setkeys

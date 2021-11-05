@@ -1,0 +1,15 @@
+#!/bin/bash
+
+# Executed on xinit, calls script to set background picture, starts compozition manager
+
+
+setbg
+xcompmgr -cfF -o 0.1 -D 1.5 # c: shadows; f: smooth fade; F: fade on opacity change; D: transition speed
+
+# turn off Display Power Management Service (DPMS)
+xset -dpms
+setterm -powerdown 0
+
+# turn off black Screensaver
+xset s off
+

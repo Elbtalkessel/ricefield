@@ -1,0 +1,15 @@
+#!/bin/sh
+
+# Accepts a command to run
+# Starts in background
+# Periodically checks if the command still run and if not restarts it
+
+func=$1
+shift;
+while true; do
+  start-stop-daemon -Sox $(which $func) -- $@;
+  # if an instance of $func already running start-stop-daemon will exit
+  # with status 0 because -o switch is passed
+  [ "$?" == "0" ] && exit 0;
+done
+

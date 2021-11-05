@@ -1,0 +1,91 @@
+#!/usr/bin/python3
+
+from io import StringIO
+import os
+import argparse
+from pathlib import Path
+
+
+parser = argparse.ArgumentParser(description='Generates .m3u by folder')
+parser.add_argument(
+    'music_dir',
+    help='Music folder',
+)
+parser.add_argument(
+    '--out',
+    help='Playlists directory. Relative to the music dir or absolute path.',
+    default='./PLAYLISTS'
+)
+parser.add_argument(
+    '--rel',
+    help=("""
+        Instead of path relative to playlist directory location,
+        make relative to the music_dir location.
+        E.g. args `. --rel` -> Folder/song.mp3, `~/Music --rel` -> ~/Music/Folder/song.mp3
+    """),
+    action='store_false',
+    default=True,
+)
+parser.add_argument(
+    '--dry-run',
+    help="Don't write out",
+    action='store_true',
+    default=False,
+)
+args = parser.parse_args()
+
+
+MUSIC_DIR = Path(args.music_dir)
+PLAYLIST_DIR = MUSIC_DIR / os.path.expanduser(args.out)
+FILE_EXT = ('mp3', 'flac')
+
+
+if not os.path.exists(MUSIC_DIR):
+    print(f'{MUSIC_DIR} does not exist.')
+    exit(1)
+if not os.path.exists(PLAYLIST_DIR):
+    print(f'{PLAYLIST_DIR} does not exist. Music dir was {MUSIC_DIR}')
+    exit(1)
+
+
+def validate_path(path):
+    strpath = str(path).lower()
+    return "live" not in strpath and strpath.endswith(FILE_EXT)
+
+
+def subwalk(top):
+    for root, dirs, files in os.walk(top):
+        pardir = Path(os.path.relpath(root, PLAYLIST_DIR) if args.rel else root)
+        yield from (pardir / filename for filename in files if validate_path(pardir / filename))
+
+
+def rootlist():
+    for d in next(os.walk(MUSIC_DIR))[1]:
+        subdir = MUSIC_DIR / d
+        yield d, subwalk(subdir)
+
+
+def main():
+    for band, songs in rootlist():
+        written = 0
+        content = StringIO()
+        filepath = PLAYLIST_DIR / f'{band}.m3u'
+
+        print(filepath)
+        content.write('#EXTM3U\n')
+        for song in songs:
+            print(f'-> {song}')
+            written += content.write(str(song) + '\n')
+
+        print(f'<- {written} ({"skip" if not written else "write"})\n---')
+        if written == 0:
+            continue
+
+        if args.dry_run:
+            continue
+
+        with open(filepath, 'w') as f:
+            f.write(content.getvalue())
+
+main()
+

@@ -1,0 +1,80 @@
+#!/usr/bin/env python3
+import os
+import subprocess
+from argparse import ArgumentParser
+
+SRC = os.getenv("HOME")
+SRC_DOWNLOAD = os.getenv("XDG_DOWNLOAD_DIR")
+SRC_MUSIC = os.path.join(SRC, "Music")
+SRC_PHONE = os.path.join(SRC_DOWNLOAD, "PHONE")
+DST_INT = "/sdcard"
+DST_EXT = "/storage/6E4A-1A15"
+
+PUSH_FOLDERS = [
+    [os.path.join(SRC, "Music"), os.path.join(DST_EXT, "Music")]
+]
+
+PULL_FOLDERS = [
+    [os.path.join(DST_INT, folder), SRC_DOWNLOAD] for folder in ["Pictures", "DCIM", "Download", "MEGA", "Movies"]
+]
+
+IGNORE_FILE = ".syncignore"
+SYNC_FILE = ".syncfile"
+
+
+def move_glob_files(src, reg, dst):
+    cmd = "find '%s' -regex '%s' -exec mv -t %s {} +" % (src, reg, dst)
+    print(cmd)
+    subprocess.run(cmd, shell=True)
+
+
+def push():
+    dirs = os.listdir(SRC_MUSIC)
+    dirs_ignore = [IGNORE_FILE]
+    if IGNORE_FILE in dirs:
+        with open(os.path.join(base, IGNORE_FILE)) as f:
+            dirs_ignore.extend(f.read().split())
+    dirs = [d for d in dirs if d not in dirs_ignore]
+    dirs.sort()
+    for d in dirs:
+        try:
+            src = os.path.join(base, d)
+            dst = os.path.join(DST_EXT, "Music")
+            cmd = f"adb-sync -n -d '{src}' '{dst}'"
+            subprocess.run(cmd, shell=True)
+        except KeyboardInterrupt:
+            print('bye.')
+            return
+
+def pull():
+    dirs = ["Pictures", "DCIM", "Download", "MEGA", "Movies"]
+    dirs.sort()
+    dst = os.path.join(SRC, "Download", "PHONE")
+    os.makedirs(dst, exist_ok=True)
+    for d in dirs:
+        try:
+            src = os.path.join(DST_INT, d)
+            cmd = f"adb-sync --reverse '{src}' '{dst}'"
+            print(cmd)
+            subprocess.run(cmd, shell=True)
+        except KeyboardInterrupt:
+            print('bye.')
+
+    os.makedirs(os.path.join(SRC_DOWNLOAD, "Pictures"), exist_ok=True)
+    os.makedirs(os.path.join(SRC_DOWNLOAD, "Videos"), exist_ok=True)
+    move_glob_files(dst + "/", ".*\.\(jpg\|png\)", "~/Download/Pictures/")
+    move_glob_files(dst + "/", ".*\.\(mp4\|mov\)", "~/Download/Videos/")
+
+
+if __name__ == '__main__':
+    arg = ArgumentParser()
+    arg.add_argument('c', nargs='+')
+    args = arg.parse_args()
+    func_map = {
+        'pull': pull,
+        'push': push,
+    }
+    exec_funcs = [f for f in [func_map.get(f) for f in args.c] if f is not None]
+    for func in exec_funcs:
+        func()
+

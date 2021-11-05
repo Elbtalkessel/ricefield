@@ -1,0 +1,32 @@
+#!/bin/sh
+
+title=''
+if [ -z "$(mpc | head -1 | grep -o 'volume: n/a')" ]
+then
+  # Get soung title
+  title=$(mpc -f %title% | head -1)
+  # Song has no title, use file name without extension
+  if [ -z "$title" ]
+  then
+    title=$(basename "$(mpc | head -1)" | sed 's,\(\.mp3\|\.flac\),,g')
+  fi
+  # File name is too long, cut it to 20 symbols
+  if [ "${#title}" -gt 10 ]
+  then
+    title="$(echo ${title} | cut -c -10)~"
+  fi
+fi
+
+# nothing is running = audio stopped
+if [ -z "$(pactl list sinks short | grep RUNNING)" ]
+then
+  status=''
+else
+  status=''
+fi
+
+# pad variable, '100', ' 99', etc.
+volume=$(printf %3s $(ponymix get-volume))
+device=$(ponymix --short | awk '(NR==1){print $4}')
+echo " ${volume}% ${status} [${device}] ${title}"
+

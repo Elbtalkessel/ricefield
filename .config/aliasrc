@@ -1,0 +1,79 @@
+#!/bin/sh
+
+# Use neovim for vim if present.
+command -v nvim >/dev/null && alias vim="nvim" vimdiff="nvim -d" vi="nvim"
+
+# Verbosity and settings that you pretty much just always are going to want.
+alias cp="cp -iv"
+alias mv="mv -iv"
+alias rm="rm -v"
+alias ln="ln -v"
+
+# Colorize commands when possible.
+alias ls="ls -N --color=auto --group-directories-first"
+alias grep="grep --color=auto"
+alias diff="diff --color=auto"
+alias ccat="highlight --out-format=ansi"
+alias grep="grep --color=auto"
+alias egrep="egrep --color=auto"
+alias grip="grep -i --color=auto"
+
+# Variations
+alias ll="ls --dereference-command-line-symlink-to-dir -lahv"
+
+# These common commands are just too long! Abbreviate them.
+alias e="$EDITOR"
+alias v="$EDITOR"
+alias p="sudo pacman"
+alias g="git"
+alias s="sudo"
+
+alias gitm="git merge --no-ff"
+alias trem="transmission-remote"
+alias tdae="transmission-daemon"
+
+alias S="sudo systemctl"
+alias Sr="sudo systemctl restart"
+alias Ss="systemctl status"
+alias Su="systemctl --user"
+alias Sus="systemctl --user status"
+
+alias dfh="df -T -h -x tmpfs -x devtmpfs"
+alias ytdlv="youtube-dl -f \"bestvideo[ext=mp4]+bestaudio[ext=m4a]/mp4\""
+alias ytdlm="youtube-dl --output \"%(title)s.%(ext)s\" --extract-audio --audio-format mp3"
+alias servefolder="python3 -m http.server 9000 --bind 127.0.0.1"
+alias cpufreq="watch -n.5 'grep \"^[c]pu MHz\" /proc/cpuinfo'"
+alias packages="comm -23 <(pacman -Qqett | sort) <(pacman -Qqg base -g base-devel | sort | uniq)"
+alias borg="sudo -E borg"
+
+# Power management
+# FIXME: it does work right
+# alias logout="pkill -KILL -u risus"
+alias reboot="S reboot"
+alias poweroff="S poweroff"
+
+# These dudes are ignoring XDG spec
+alias tmux="tmux -f $XDG_CONFIG_HOME/tmux/tmux.conf"
+alias abook="abook --config $XDG_CONFIG_HOME/abook/abookrc --datafile $XDG_DATA_HOME/abook/addressbook"
+alias docker="docker --config $XDG_CONFIG_HOME/docker"
+alias geth="geth --datadir $XDG_CONFIG_HOME/ethereum"
+alias gpg2="gpg2 --homedir $XDG_DATA_HOME/gnupg"
+alias ngrok="ngrok -config $XDG_CONFIG_HOME/ngrok/ngrok.yaml"
+alias yarn="HOME=$XDG_DATA_HOME yarn"
+alias onion="tor-browser --dir=$XDG_DATA_HOME/tor-browser"
+
+# Navigation
+alias gsrc="cd $HOME/.local/src && ls"
+alias gprj="cd $HOME/Projects && ls"
+alias gbin="cd $HOME/.local/bin/shell && ls"
+alias gcon="cd $HOME/.config && ls"
+
+# Configs
+alias esxh="$EDITOR $XDG_CONFIG_HOME/sxhkd/sxhkdrc"
+alias edun="$EDITOR $XDG_CONFIG_HOME/dunst/dunstrc"
+
+# remove the "alias" prefix
+# replace = with space
+# higlight alias sequence in green, italic and add :
+# higlight alias comment in red, remove "#"
+alias aliases="head -n -1 ~/.config/aliasrc | sed -E 's/(alias |^#.*)//; s/=/ /; s/(^[a-z0-9A-Z]+)/\c[[1;32m\1\c[[0m:/; s/  # (\w+)/:\x1b[3;31m\1/; s/\"(.*)\"/\1/' | column -s : -t -N 'Shortcut,Command,Description' | less"

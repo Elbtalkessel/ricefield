@@ -1,0 +1,14 @@
+#!/bin/bash
+
+# Requirements: wget
+#
+# Removes GET params from url, takes basename from cleaned url and uses it as filename
+# if filename is already in folder exists.
+
+
+filename=$(basename $(echo $@ | sed 's,?.*=.*,,g'))
+
+[ $(ls | grep -o $filename) ] && echo "Already exist" && exit 0
+
+wget $@ -O $filename
+

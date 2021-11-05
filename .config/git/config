@@ -1,0 +1,13 @@
+[user]
+	email = me@0x00.life
+	name = Elbtalkessel
+[pull]
+	ff = only
+[core]
+	autocrlf = input
+[alias]
+	permission-reset = !git diff -p -R --no-ext-diff --no-color | grep -E \"^(diff|(old|new) mode)\" --color=never | git apply
+[init]
+	defaultBranch = master
+[rerere]
+	enabled = true

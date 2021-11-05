@@ -1,0 +1,3 @@
+SURFRAW_graphical_browser="/sbin/w3m"
+SURFRAW_text_browser="/sbin/w3m"
+SURFRAW_graphical=no

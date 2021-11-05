@@ -1,0 +1,6 @@
+#!/bin/sh
+
+curl -Ik ddg.gg >/dev/null 2>&1
+exit_code=$?
+[ "$exit_code" == "0" ] && echo "yes" || echo "no"
+exit $exit_code

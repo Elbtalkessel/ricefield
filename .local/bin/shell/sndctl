@@ -1,0 +1,40 @@
+#!/bin/sh
+
+
+# Requires: ponymix, pactl, pacmd, dmenu
+#
+# Finds running sink (sink that outputs something) and calls ponymix to:
+# Toggle mute
+# Mute
+# Increase / decrease volume
+#
+# `soundctl chout` changes current active sink, uses dmenu to display options.
+
+
+ARG="${2:-5}"
+
+
+ponydo() {
+  local d=$(pactl list sinks short | grep -P 'RUNNING' | awk '{print $1}');
+  [ ! -z $d ] && ponymix -d "$d" $1 "$ARG" || ponymix $1 "$ARG"
+}
+
+chout() {
+  local sink=$(ponymix list | grep -P "sink \d+" -A 1 | sed 's,sink \([0-9]\+\): .*$,\1,g' | tr '\n' ' ' | sed 's, -- ,\n,g' | tr '[:upper:]' '[:lower:]' | dmenu | awk '{print $1}')
+  pactl set-default-sink "${sink}"
+  pacmd list-sink-inputs | grep index | grep -Po '[0-9]+' | xargs -I{} pacmd move-sink-input {} "${sink}"
+  ponymix set-default "${sink}"
+}
+
+
+case "$1" in
+  toggle) ponydo toggle ;;
+  mute) ponydo toggle ;;
+  up) ponydo increase ;;
+  down) ponydo decrease ;;
+  output) chout ;;
+esac >/dev/null
+
+
+pkill -RTMIN+10 "dwmblocks"
+

@@ -1,0 +1,62 @@
+#!/bin/sh
+
+# pip utils
+#
+# Helps install package and write it into requirements file
+# or unistall and remove from requirement file.
+
+set -e
+
+
+REQUIREMENTS="${PWD}/requirements.txt"
+LOCK="${PWD}/requirements.lock.txt"
+
+
+[ -z "$VIRTUAL_ENV" ] && echo "Cannot run outside virtualenv" && exit 1
+[ ! -f "$REQUIREMENTS" ] && echo "$REQUIREMENTS not found" && exit 1
+
+
+i() {
+  echo "Installing..."
+  pip install "$@"
+  pip freeze | grep -iE $(echo "$@" | tr ' ' '|') | sed "/^$/d" >> $REQUIREMENTS
+}
+
+
+r() {
+  echo "Uninstalling..."
+  pip uninstall "$@"
+  # turn "django celery" into "(django|celery)"
+  lookup=$(echo $@ | tr ' ' '|' | xargs -I{} echo "({})")
+  sed -Ei "/$lookup/Id" $REQUIREMENTS
+}
+
+
+l() {
+  echo "Locking deps..."
+  pip freeze > "$LOCK"
+}
+
+
+s() {
+  echo "Installed:"
+  echo
+  cat $REQUIREMENTS
+}
+
+
+h() {
+  echo "pip utils"
+  echo "  i <packages>: install"
+  echo "  r <packages>: remove"
+  echo "  l           : lock"
+}
+
+
+funcs="$1"
+shift
+for func in $(echo "$funcs" | grep -o .)
+do
+  "$func" $@
+done
+

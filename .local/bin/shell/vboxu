@@ -1,0 +1,29 @@
+#!/bin/bash
+
+sel_box() {
+  local box=$(vboxmanage list vms | grep -o '".*"' | grep -o '[^"]*' | dmenu)
+  echo $box
+}
+
+set_resolution() {
+  BOX=$(sel_box)
+  RESOLUTION="2560x1080"
+  vboxmanage setextradata "$BOX" VBoxInternal2/EfiGraphicsResolution $RESOLUTION
+  notify-send "VBOXU" "$BOX resolution is $RESOLUTION now"
+}
+
+init_mac() {
+  box=$(sel_box)
+  VBoxManage modifyvm "$box" --cpuidset 00000001 000106e5 00100800 0098e3fd bfebfbff
+  VBoxManage setextradata "$box" "VBoxInternal/Devices/efi/0/Config/DmiSystemProduct" "iMac11,3"
+  VBoxManage setextradata "$box" "VBoxInternal/Devices/efi/0/Config/DmiSystemVersion" "1.0"
+  VBoxManage setextradata "$box" "VBoxInternal/Devices/efi/0/Config/DmiBoardProduct" "Iloveapple"
+  VBoxManage setextradata "$box" "VBoxInternal/Devices/smc/0/Config/DeviceKey" "ourhardworkbythesewordsguardedpleasedontsteal(c)AppleComputerInc"
+  VBoxManage setextradata "$box" "VBoxInternal/Devices/smc/0/Config/GetKeyFromRealSMC" 1
+  VBoxManage modifyvm "$box" --cpu-profile "Intel Core i7-6700K"
+  notify-send "VBOXU" "$box initialized."
+}
+
+cmd=$1
+shift
+$cmd $@

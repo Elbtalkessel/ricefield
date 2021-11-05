@@ -1,0 +1,18 @@
+#!/bin/sh
+
+# Toggles dnust between muted and not muted
+
+
+if [ "$(dunstctl is-paused)" == "false" ]
+then
+  notify-send "dunst" "paused"
+  sleep 1
+  dunstctl close-all
+  dunstctl set-paused true
+else
+  dunstctl set-paused false
+  notify-send "dunst" "running"
+  sleep 1
+  dunstctl close
+fi
+

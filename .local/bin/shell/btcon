@@ -1,0 +1,6 @@
+#!/usr/bin/bash
+
+MAC=94:DB:56:8E:0B:22
+bluetoothctl disconnect $MAC
+bluetoothctl connect $MAC
+

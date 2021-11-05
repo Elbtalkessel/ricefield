@@ -1,0 +1,30 @@
+#!/bin/sh
+
+TEMPS=$(sensors k10temp-pci-00c3 | grep Tctl | awk '{print $2}')
+SHOW="${TEMPS}"
+
+
+# Show memory stats only if exceed 80% usage
+TOTAL_MEMORY=$(free | awk '/^Mem:/ {print $2}')
+# Divide result by 1 to get rid of fractional part (default bc behaviour if scale option is not set)
+ALERT_LIMIT=$(echo "0.8 * $TOTAL_MEMORY / 1" | bc)
+if [ `free | awk '/^Mem:/ {print $3}'` -gt $ALERT_LIMIT ]; then
+  MEM=$(free -h | awk '/^Mem:/ {print $3 "/" $2}')
+  SHOW="${SHOW} ${MEM}"
+fi
+
+
+# Alterante traffic stats and disk usage
+# 0 - 20; 20 - 40; 40 - 60
+SECONDS=$(date +'%S')
+if [ $SECONDS -lt 20 ] || [ $SECONDS -gt 40 ]; then
+  TRAFFIC=$(vnstat -i wg0 --oneline | awk -F';' '{print $6 "/" $11}')
+  [ "$(nmcli device | grep -P "(wg|proton)")" ] && VPN="" || VPN=""
+  SHOW="${SHOW} [${TRAFFIC} ${VPN}]"
+else
+  DISKS=$(df / /home /mnt/storage/Backup --output=pcent | tail -n +2 | nl -s '' -w1 | sed 's/^1/Home /;s/^2/Root /;s/^3/NAS /;s/ //' | tr '\n' ' ' | sed 's/ $//')
+  SHOW="${SHOW} [${DISKS}]"
+fi
+
+
+printf %s "${SHOW}"

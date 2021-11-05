@@ -1,0 +1,4 @@
+#!/bin/bash
+
+xsetroot -name "fsignal:xrdb"
+

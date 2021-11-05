@@ -1,0 +1,25 @@
+#!/bin/sh
+
+_proxy() {
+  # get VM options, first argument defines a filter to passthrough to virsh
+  local VM=$(virsh list $1 --name | dmenu -i)
+  [ -z "$VM" ] && exit 1
+
+  # second argument is command to apply on the select vm
+  notify-send "$2 $VM"
+  local EXT_TEXT=$(virsh $2 $VM) && notify-send "$EXT_TEXT"
+
+  # wait for shutdown, after check libvirtd logs and notify if
+  # GPU didn't reset
+  if [ "$2" == "shutdown" ] || [ "$2" == "destroy" ]; then
+    while ! virsh list --state-shutoff | grep -i "$VM"; do sleep 0.4; done;
+    [ "$(systemctl status libvirtd | grep 127)" ] && notify-send "GPU didn't reset" -u critical
+  fi
+}
+
+case $1 in
+  "start") _proxy --inactive start ;;
+  "stop") _proxy --state-running shutdown ;;
+  "kill") _proxy --state-running destroy ;;
+esac
+
