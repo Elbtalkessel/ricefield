@@ -17,8 +17,7 @@ then
   fi
 fi
 
-# nothing is running = audio stopped
-if [ -z "$(pactl list sinks short | grep RUNNING)" ]
+if [ "$(mpc status | grep 'paused')" ]
 then
   status=''
 else
@@ -28,5 +27,5 @@ fi
 # pad variable, '100', ' 99', etc.
 volume=$(printf %3s $(ponymix get-volume))
 device=$(ponymix --short | awk '(NR==1){print $4}')
-echo " ${volume}% ${status} [${device}] ${title}"
+echo " ${volume}% ${device} ${status} ${title}"
 

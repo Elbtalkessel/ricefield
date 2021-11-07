@@ -113,3 +113,19 @@ viw() {
 }
 compctl -m viw
 
+update-reblock() {
+  # blocks in dwmblocks (config.h) are declired as following:
+  # { <icon>, <command>, <update interval>, <update signal> }
+  # if line has comment "// BLK" such block will be extracted to the reblock script
+  # reblock script accepts or basename of command (or name specified as "BLK(<name>)")
+  # "reblock clock" will reload the clock block by sending <update signal>
+
+  local OUT="$HOME/.local/bin/reblock"
+  local IN="$HOME/.local/src/dwmblocks/config.h"
+  cat \
+    <(echo "#!/bin/sh\ndeclare -A killmap") \
+    <(grep "BLK" $IN | sed -E "s,(\{|\}|\"|\,|// |BLK|\(|\)),,g;s,^ +,,;s, +, ,g" | awk 'function base(f, d) {if(d) return d; sub(".*/", "", f); return f;}{print "killmap["base($1, $4)"]="$3}') \
+    <(echo 'pkill -RTMIN+${killmap[$@]} dwmblocks') >! $OUT
+  chmod +x $OUT
+}
+

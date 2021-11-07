@@ -2,7 +2,6 @@
 
 # Accepts a command to run
 # Starts in background
-# Periodically checks if the command still run and if not restarts it
 
 func=$1
 shift;

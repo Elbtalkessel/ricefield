@@ -36,5 +36,5 @@ case "$1" in
 esac >/dev/null
 
 
-pkill -RTMIN+10 "dwmblocks"
+reblock music
 
