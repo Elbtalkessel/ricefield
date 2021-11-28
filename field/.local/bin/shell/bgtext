@@ -26,7 +26,7 @@ else
   outloc="${bgloc%/*}magickbg"
 fi
 
-text="$(date +'%B %d, %Y')\n\n$(calcurse -Q --days 2 --output-datefmt '%h %d')\n"
+text="$(calcurse -a --output-datefmt '%A %d of %B, %Y')\n"
 y=$(echo "$(identify -format "%h" "$bgloc") / 2 - 20" | bc)
 x=20
 

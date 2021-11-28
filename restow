@@ -1,0 +1,4 @@
+#!/bin/sh
+
+rm ~/.config/mimeapps.list 2>/dev/null
+stow -R field
