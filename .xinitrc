@@ -15,6 +15,7 @@ dbus-update-activation-environment --systemd DBUS_SESSION_BUS_ADDRESS DISPLAY XA
 if [ "$XDG_CURRENT_DESKTOP" = "DWM" ]
 then
   setbg  # set background image
+  bgtext # draws a text over set background
   xset -dpms  # turn off Display Power Management Service (DPMS)
   setterm -powerdown 0
   xset s off  # turn off black Screensaver
@@ -25,6 +26,8 @@ then
   # c: shadows; f: smooth fade; F: fade on opacity change; D: transition speed
   keeprunning xcompmgr -cfF -o 0.1 -D 1.5 &
   waitfor xcompmgr
+
+  keeprunning mpd-module-update &
 
   while :; do
 	  ssh-agent dwm || break

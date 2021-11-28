@@ -1,0 +1,47 @@
+#!/bin/sh
+
+# Reads $WALLPAPER arg, draws a text on it and saves it as `magickbg` in same directory
+#
+# Args:
+#   - preview: positional, stores true, writes an a temporary file, calls sxiv and removes temporary file afterwards.
+#
+# Deps: imagemagick
+# Soft deps: calcurse, sxiv, xwallpaper, fira code font
+#
+# TODO:
+#   - determine --focus arg and -pointsize based on image dimensions
+#   - calculate output text height to get a perfect Y value for centered text?
+#   - a cronjob or service, but both need access to Xorg I think
+
+bgloc=$WALLPAPER
+[ -z $bgloc ] || [ ! -f $bgloc ] && echo 'Wallpaper is missing or $bgloc variable is not set.' && exit 1
+tmploc="/tmp/wallpaper"
+
+if [ "$1" = "preview" ]
+then
+  outloc=$tmploc
+  rm -f "$outloc" 2>/dev/null
+else
+  # ~~Похоже на эльфийский, не могу прочесть~~ path without basename
+  outloc="${bgloc%/*}magickbg"
+fi
+
+text="$(date +'%B %d, %Y')\n\n$(calcurse -Q --days 2 --output-datefmt '%h %d')\n"
+y=$(echo "$(identify -format "%h" "$bgloc") / 2 - 20" | bc)
+x=20
+
+convert "$bgloc"\
+  -fill white\
+  -gravity SouthWest\
+  -pointsize 45\
+  -font "Fira-Code-SemiBold" \
+  -annotate +$x+$y "$text" "$outloc"
+
+if [ "$1" = "preview" ]
+then
+  sxiv "$outloc"
+  rm "$outloc"
+else
+  xwallpaper --focus "$outloc"
+fi
+

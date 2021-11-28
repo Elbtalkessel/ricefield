@@ -1826,4 +1826,4 @@ c.scrolling.smooth = True
 # config.bind('y', 'prompt-accept yes', mode='yesno')
 config.load_autoconfig()
 config.source('userconfig.py')
-config.source('theme.py')
+config.source('themes/onedark.py')

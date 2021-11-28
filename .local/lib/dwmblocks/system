@@ -15,7 +15,7 @@ fi
 
 
 # Alterante traffic stats and disk usage
-M=$(date +'%M')
+M=$(date +'%-M')
 if [ $(($M % 2)) -eq 0 ]; then
   TRAFFIC=$(vnstat -i wg0 --oneline | awk -F';' '{print $6 "/" $11}')
   [ "$(nmcli device | grep -P "(wg|proton)")" ] && VPN="" || VPN=""

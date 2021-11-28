@@ -8,11 +8,12 @@ export XDG_RUNTIME_DIR=/run/user/$(id -u)
 [ "$(tty)" = "/dev/tty2" ] && export XDG_CURRENT_DESKTOP="DWM"
 
 
-# Other directories can be used in scripts
+# Other directories and files can be used in scripts
 export BIN_HOME="$HOME/.local/bin"
 export SOURCE_HOME="$HOME/.local/src"
 export BACKUPS_DIR="/mnt/storage/Backups"
 export PROJECTS_DIR="$HOME/Projects"
+export WALLPAPER="${XDG_CACHE_HOME:-$HOME/.cache/}/bg"
 
 
 # Adds `~/.local/bin` and children dir to $PATH

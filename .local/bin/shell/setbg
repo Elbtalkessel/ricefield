@@ -8,13 +8,14 @@
 
 
 # Location of link to wallpaper link.
-bgloc="${XDG_CACHE_HOME:-$HOME/.cache/}/bg"
+bgloc="$WALLPAPER"
 
-[ -f "$1" ] && ln -sf "$(readlink -f "$1")" "$bgloc" && notify-send -i "$bgloc" "Changing wallpaper..."
-
-[ -d "$1" ] && ln -sf "$(find "$(readlink -f "$1")" -iregex '.*.\(jpg\|jpeg\|png\|gif\)' -type f | shuf -n 1)" "$bgloc" && notify-send -i "$bgloc" "Random Wallpaper chosen."
+# You can use link instead of copy, I need copy for drawning over wallpaper
+[ -f "$1" ] && cp -f "$(readlink -f "$1")" "$bgloc" && notify-send -i "$bgloc" "Changing wallpaper..."
+[ -d "$1" ] && cp -f "$(find "$(readlink -f "$1")" -iregex '.*.\(jpg\|jpeg\|png\|gif\)' -type f | shuf -n 1)" "$bgloc" && notify-send -i "$bgloc" "Random Wallpaper chosen."
 
 # If pywal is installed, use it.
-#wal -a "0.98" -s -i "$(readlink -f "$bgloc")" -o "${XDG_CONFIG_HOME:-$HOME/.config}/wal/postrun" >/dev/null 2>&1
+wal -a "0.98" -s -i "$(readlink -f "$bgloc")" -o "${XDG_CONFIG_HOME:-$HOME/.config}/wal/postrun" >/dev/null 2>&1
 
-xwallpaper --zoom "$bgloc"
+xwallpaper --focus "$bgloc"
+
