@@ -12,13 +12,13 @@ set color256
 cmd open ${{
     case $(file --mime-type $f -b) in
       text/troff) man ./ $f;;
-        text/*) $EDITOR $fx;;
-  image/x-xcf|image/svg+xml) setsid gimp $f >/dev/null 2>&1 & ;;
-  image/*) rotdir $f | setsid sxiv -aio 2>/dev/null | lf-select & ;;
-  audio/*) mpv --input-ipc-server=/tmp/mpvsoc$(date +%%s) $f ;;
-  video/*) setsid mpv --input-ipc-server=/tmp/mpvsoc$(date +%%s) $f -quiet >/dev/null 2>&1 & ;;
-  application/pdf) setsid zathura $fx >/dev/null 2>&1 & ;;
-        *) for f in $fx; do setsid $OPENER $f >/dev/null 2>&1 & done;;
+      text/*) $EDITOR $fx;;
+      image/x-xcf|image/svg+xml) setsid gimp $f >/dev/null 2>&1 & ;;
+      image/*) rotdir $f | setsid sxiv -aio 2>/dev/null | lf-select & ;;
+      audio/*) mpv --input-ipc-server=/tmp/mpvsoc$(date +%%s) $f ;;
+      video/*) setsid mpv --input-ipc-server=/tmp/mpvsoc$(date +%%s) $f -quiet >/dev/null 2>&1 & ;;
+      application/pdf) setsid zathura $fx >/dev/null 2>&1 & ;;
+      *) for f in $fx; do setsid $OPENER $f >/dev/null 2>&1 & done;;
     esac
 }}
 
@@ -27,15 +27,15 @@ cmd rename %[ -e $1 ] && printf "file exists" || mv $f $1
 cmd delete ${{
   set -f
   printf "%s\n\t" "$fx"
-  printf "delete?[y/N]"
+  printf "delete?[y/N] "
   read ans
-  [ $ans = "y" ] && rm -rf $fx
+  [ $ans = "y" ] && echo $fx | xargs -I'{}' rm -r '{}'
 }}
 
 cmd moveto ${{
   set -f
   clear; echo "Move to where?"
-  dest="$(cut -d' ' -f2- ~/.config/directories | fzf)" &&
+  dest="$(cut -d' ' -f2- ~/.config/directories | skim)" &&
   eval mv -iv $fx $dest &&
   notify-send "🚚 File(s) moved." "File(s) moved to $dest."
 }}
@@ -43,7 +43,7 @@ cmd moveto ${{
 cmd copyto ${{
   set -f
   clear; echo "Copy to where?"
-  dest="$(cut -d' ' -f2- ~/.config/directories | fzf)" &&
+  dest="$(cut -d' ' -f2- ~/.config/directories | skim)" &&
   eval cp -ivr $fx $dest &&
   notify-send "📋 File(s) copied." "File(s) copies to $dest."
 }}
@@ -53,9 +53,9 @@ cmd bulkrename ${{
 }}
 
 # Bindings
-map c $lf -remote "send $id cd $(cut -d'  ' -f2 ~/.config/directories | fzf)"
-map <c-f> $lf -remote "send $id select '$(fzf)'"
-map J $lf -remote "send $id cd $(cut -d'  ' -f2 ~/.config/directories | fzf)"
+map c $lf -remote "send $id cd $(cut -d'  ' -f2 ~/.config/directories | skim)"
+map <c-f> $lf -remote "send $id select '$(skim)'"
+map J $lf -remote "send $id cd $(cut -d'  ' -f2 ~/.config/directories | skim)"
 map gh
 map g top
 map D delete

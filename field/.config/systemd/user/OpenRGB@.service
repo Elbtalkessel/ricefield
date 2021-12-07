@@ -1,9 +1,0 @@
-[Unit]
-Description=OpenRGB %i profile
-
-[Service]
-Type=oneshot
-ExecStart=/usr/bin/openrgb -p %h/.config/OpenRGB/%i.orp
-
-[Install]
-WantedBy=default.target
