@@ -1,0 +1,29 @@
+# <issue>:    <type>([tag]):  <message>
+# |           ^----^^---^     ^-------^
+# |           |     |         |
+# |           |     |         +-> Summary in present tense.
+# |           |     |
+# |           |     +-> optional type Tag
+# |           |
+# |           +-------> Type: chore, docs, feat, fix, refactor, style, or test.
+# |
+# +-> Issue number
+#
+# Type options:
+#   feat:       New feature for the user
+#   fix:        Bug fix for the user
+#   docs:       Changes to the documentation
+#   style:      Formatting, missing semi colons, etc; no production code change
+#   refactor:   Refactoring production code, eg. renaming a variable
+#   test:       Adding missing tests, refactoring tests; no production code change
+#   chore:      Updating grunt tasks etc; no production code change
+#   revert:     Change back to the previous commit
+#
+# Tag options:
+#   add         Create a capability e.g. feature, test, dependency.
+#   cut         Remove a capability e.g. feature, test, dependency.
+#   fix         Fix an issue e.g. bug, typo, accident, misstatement.
+#   test        Add or refector anything regard test, e.g add a new testCases.
+#   make        Change the build process, or tooling, or infra.
+#   optimize    Refactor of performance, e.g. speed up code.
+

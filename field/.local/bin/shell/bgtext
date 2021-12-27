@@ -42,6 +42,6 @@ then
   sxiv "$outloc"
   rm "$outloc"
 else
-  xwallpaper --focus "$outloc"
+  xwallpaper --zoom "$outloc"
 fi
 

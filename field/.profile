@@ -89,8 +89,6 @@ export LESS_TERMCAP_ue="$(printf '%b' '[0m')"
 export VAGRANT_DEFAULT_PROVIDER=kvm
 export VIRSH_DEFAULT_CONNECT_URI='qemu:///system'
 export DOCKER_BUILDKIT=1
-# backups
-export BORG_REPO="/mnt/storage/Backup/Borg"
 # appearance
 # https://wiki.archlinux.org/title/Uniform_look_for_Qt_and_GTK_applications
 # style qt apps as gtk, requires qt5-styleplugins

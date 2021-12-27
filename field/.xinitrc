@@ -2,10 +2,16 @@
 
 # xinitrc runs automatically when you run startx.
 # things to be started in background
-sxhkd >| $HOME/.local/share/logs/sxhkd_$(date -I).log 2>&1 &
+sxhkd &
 dunst -conf $XDG_CONFIG_HOME/dunst/dunstrc &
 unclutter & # Remove mouse when idle
 setkeys &
+calcurse --daemon
+vorta -d
+
+xset -dpms  # turn off Display Power Management Service (DPMS)
+setterm -powerdown 0
+xset s off  # turn off black Screensaver
 
 xrdb -load $HOME/.cache/wal/colors.Xresources
 xrdb -merge $HOME/.config/Xresources
@@ -16,9 +22,6 @@ if [ "$XDG_CURRENT_DESKTOP" = "DWM" ]
 then
   setbg  # set background image
   bgtext # draws a text over set background
-  xset -dpms  # turn off Display Power Management Service (DPMS)
-  setterm -powerdown 0
-  xset s off  # turn off black Screensaver
 
   keeprunning dwmblocks &
   waitfor dwmblocks

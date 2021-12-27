@@ -5,3 +5,5 @@
 
 setxkbmap -layout us,ru
 xset r rate 300 75 &
+sudo systemctl restart logid
+notify-send "logid restart went $?"

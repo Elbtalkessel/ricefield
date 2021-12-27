@@ -15,7 +15,7 @@ bgloc="$WALLPAPER"
 [ -d "$1" ] && cp -f "$(find "$(readlink -f "$1")" -iregex '.*.\(jpg\|jpeg\|png\|gif\)' -type f | shuf -n 1)" "$bgloc" && notify-send -i "$bgloc" "Random Wallpaper chosen."
 
 # If pywal is installed, use it.
-wal -a "0.98" -s -i "$(readlink -f "$bgloc")" -o "${XDG_CONFIG_HOME:-$HOME/.config}/wal/postrun" >/dev/null 2>&1
+# wal -a "0.98" -s -i "$(readlink -f "$bgloc")" -o "${XDG_CONFIG_HOME:-$HOME/.config}/wal/postrun" >/dev/null 2>&1
 
-xwallpaper --focus "$bgloc"
+xwallpaper --zoom "$bgloc"
 

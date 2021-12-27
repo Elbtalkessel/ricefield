@@ -42,11 +42,11 @@ Plugin 'itchyny/lightline.vim'
 Plugin 'vim-airline/vim-airline-themes'
 
 " Code completion
-Plugin 'ycm-core/YouCompleteMe'
+" Plugin 'ycm-core/YouCompleteMe'
 Plugin 'jiangmiao/auto-pairs'
 
 " Misc
-Plugin 'tpope/vim-fugitive'                 " Git wrapper
+" Plugin 'tpope/vim-fugitive'                 " Git wrapper
 Plugin 'chrisbra/Colorizer'                 " hex colors
 
 Plugin 'vimwiki/vimwiki'

@@ -4,6 +4,7 @@ Description=Scream on gateway
 [Service]
 Type=simple
 ExecStart=/sbin/scream -v -i enp6s0
+Restart=on-failure
 
 [Install]
 WantedBy=default.target
